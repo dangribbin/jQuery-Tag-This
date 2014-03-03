@@ -15,7 +15,7 @@ You can use Tag-This in two ways.
 2. Use the API to programmatically create & remove tags
  	- If you choose this option, you can pass your own 'id' and 'text' values to create the tag with. If you pass 'id', this value gets attached to the tag you're creating with it! You might choose this option if you want to associate tags with ID's you already have. See the demo page for an example.
 
-[See Usage]()
+[See Usage](#usage)
 
 Usage
 =====
@@ -78,9 +78,10 @@ If you need to remove all tagging functionality and remove related elements, cal
 	$.tagThisDestroyAll();
 	
 Or, you can destroy just one field with:
+	
 	$('#my-input).destroy();
 
-[See All Options]()
+[See All Options](#options)
 
 Options
 =======
