@@ -17,6 +17,11 @@ You can use Tag-This in two ways.
 
 [See Usage](#usage)
 
+Demo
+=====
+
+[Visit here for a live demo of Tag-This](http://www.dangribbin.com/jquery-tag-this)
+
 Usage
 =====
 **User-typed tags**
