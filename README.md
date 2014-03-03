@@ -20,7 +20,7 @@ You can use Tag-This in two ways.
 Demo
 =====
 
-[Visit here for a live demo of Tag-This](http://www.dangribbin.com/jquery-tag-this)
+[Visit here for a live demo of Tag-This](http://www.dangribbin.net/jquery-tag-this)
 
 Usage
 =====
