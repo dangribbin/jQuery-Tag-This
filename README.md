@@ -26,7 +26,7 @@ Usage
 =====
 **User-typed tags**
 
-To allow users to create tags based on their input, you just need to call tagThis on an input element of your choosing. 
+To allow users to create tags based on their input, you just need to call tagThis once on an input element of your choosing. 
 
 Here's an example:
 
