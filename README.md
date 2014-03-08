@@ -88,6 +88,47 @@ Or, you can destroy just one field with:
 
 [See All Options](#options)
 
+Accessing tags
+==============
+
+
+You'll inevitably want to *do* something with those tags in the field once a user is finished entering them. In most cases, you'll probably want to send them to your server via an AJAX call. Luckily, Tag-This keeps an updated record of all of the tags in a given field via the 'tags' array!
+
+The 'tags' array is an array of objects- each object contains the 'id' and 'text' of a tag.
+
+To grab that array, just do this:
+
+	var tags = $('#my-input').data('tags');
+
+You'll get an array that looks like this:
+
+	[
+	  {
+	    id : 123,
+	    text : "John Doe"
+	  },
+	  {
+	    id : 1234,
+	    text : "Jane Doe"
+	  },
+	  {
+	    id : 12345,
+	    text : "Dan Doe"
+	  },
+	  {
+	    id : 123456,
+	    text : "Danielle Doe"
+	  },
+	  {
+	    id : 1234567,
+	    text : "Mike Doe"
+	  },
+	  {
+	    id : 12345678,
+	    text : "Leah Doe"
+	  }
+	]
+
 Options
 =======
 **jQuery.tagThis** has many options you can set. Below you can see what they are and what the default is.
