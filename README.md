@@ -22,6 +22,17 @@ Demo
 
 [Visit here for a live demo of Tag-This](http://www.dangribbin.net/jquery-tag-this)
 
+Installing
+==========
+
+You can clone this Git repository:
+
+	git clone https://github.com/dangribbin/jQuery-Tag-This
+
+Or install via [Bower](http://bower.io/):
+	
+	bower install jQuery-Tag-This
+
 Usage
 =====
 **User-typed tags**
