@@ -1,0 +1,77 @@
+.tag-this { 
+    border:1px solid #CCC; 
+    background: #FFF; 
+    padding:5px; 
+    width:320px; 
+    height:100px; 
+    overflow-y: auto; 
+    margin: 20px 20px 20px 0;
+    border-radius: 2px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+}
+
+.tag-this .tag { 
+    -moz-border-radius:2px; 
+    -webkit-border-radius:2px; 
+    border-radius: 2px; 
+    display: block; 
+    float: left; 
+    padding: 5px; 
+    text-decoration:none; 
+    background: #3AAA55; 
+    color: #FFF; 
+    margin-right: 5px; 
+    margin-bottom:5px;
+    font-family: tahoma, sans-serif;
+    font-size:13px; 
+    max-width: 90%;
+}
+
+.tag-this .tag button { 
+    font-weight: bold; 
+    color: #FFF; 
+    text-decoration:none; 
+    font-size: 11px; 
+    background: none; 
+    border: none; 
+    cursor: pointer; 
+} 
+
+.tag-this .tag span { 
+    word-wrap: break-word;
+}
+
+.tag-this input { 
+    padding: 6px; 
+    width:80px;
+    margin:0px; 
+    font-family: tahoma, sans-serif; 
+    font-size: 13px; 
+    border:1px solid transparent;
+    background: transparent;
+    color: #000;
+    margin-right:5px; 
+    margin-bottom:5px; 
+    outline-color: white;
+}
+
+.tag-this div { 
+    display:block; 
+    float: left; 
+}
+
+.tag-this .tag-this--clear { 
+    clear: both;
+    width: 100%; 
+    height: 0px; 
+}
+
+.tag-this .tag-this--invalid {
+    /*background: #DF3645; */
+    border: 1px dashed #DF3645;
+    outline: white;
+    color: #DF3645; 
+    border-radius: 5px;
+    outline-color:#DF3645;
+}

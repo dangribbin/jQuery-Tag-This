@@ -1,0 +1,254 @@
+<!doctype html>
+<html class="language-javascript" lang="en">
+	<head>
+        <title>jQuery Tag-This</title>
+        <link rel="stylesheet" href="prism.css">
+        <link href='http://fonts.googleapis.com/css?family=Roboto+Slab:400,700,300' rel='stylesheet' type='text/css'>
+		<link rel="stylesheet" href="../dist/jquery-tag-this.css">
+        <link rel="stylesheet" href="style.css">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0 maximum-scale=1.0 user-scalable=no" />
+        <meta name="Description" content="jQuery Tag-This is a simple-yet-powerful plugin that turns text into tags"/>
+	</head>
+	<body>
+
+    <h1>jQuery Tag-This</h1>
+
+    <h2>A simple-yet-powerful jQuery plugin that turns text into tags! Give it a try below, then visit the <a title="jQuery Tag This GitHub page" href="https://github.com/dangribbin/jQuery-Tag-This" target="_blank">GitHub repository</a> (or install via <a href="#bower">Bower</a>) to download and see full documentation.</h2>
+
+
+    <h3>Examples:</h3>
+    
+    <div class="example">
+        <label for="simple-tags">Here's the simplest way to use Tag-This. Type some text and get a tag!</label>
+        <input type="text" id="simple-tags" name="simple-tags">
+        <button class="simple-clear-all-button small-button">clear all</button>
+        <button class="see-code-button small-button">see code</button>
+
+
+
+<pre>
+<code>//set up Tag-This on our input (just call this once on page load)
+$('#simple-tags').tagThis()
+
+//that's it! type in the input above to see it in action.</code>
+</pre>
+
+
+
+
+    </div>
+
+
+    <div class="example">
+
+        <label for="email-tags">This example takes email addresses, and displays an error state when an invalid or duplicate email address was entered.</label>
+    	<input name="email-tags" id="email-tags" />
+    
+        <button class="email-clear-all-button small-button">clear all</button>
+        <button class="see-code-button small-button">see code</button>
+
+
+<pre>
+<code>//set up Tag-This on our input (just call this once on page load)
+$('#email-tags').tagThis({
+    email : true,
+    noDuplicates : true 
+});</code>
+</pre>
+
+
+    </div>
+    
+
+    <div class="example">
+    
+        <label for="user-tags">Below is an example of creating tags programmatically. Click an 'Add' button below to add tags, then click 'see code' to see how it's done.</label>
+
+        <input name="user-tags" id="user-tags" />
+
+        <button class="user-clear-all-button small-button">clear all</button>
+        <button class="see-code-button small-button">see code</button>
+
+
+<pre>
+<code>//set up Tag-This on our input (just call this once on page load)
+$('#user-tags').tagThis({
+    interactive: false,
+    noDuplicates: true 
+});
+
+//set up our click handler on a button on our page
+$('.add-button').on('click', function(){
+
+    //Tag-This lets you pass your own ID and/or text to be attached to a tag you want to create!
+    //Your code may look slightly different than this, but here's away to construct an object with an ID that Tag-This will accept.
+    var tagData = {
+        text : $(this).siblings('.name').text(),
+        id : $(this).parent().data('id') 
+    }
+
+    //We have our object- let's pass it to Tag-This's 'addTag' method
+    $('#user-tags').addTag(tagData);
+
+});
+
+//Alternately, to just pass a string you can just call .addTag("some text") ... or pass a variable- .addTag(stringVariable)</code>
+</pre>
+
+
+
+
+
+        <br>
+		<div class="user cf" data-id="123">
+            <img src="avatar.png" alt="Generic avatar"/>
+            <span class="name">John Doe</span>
+            <button class="add-button small-button">Add</button>
+		</div>
+		<div class="user cf" data-id="1234">
+            <img src="avatar.png" alt="Generic avatar"/>
+            <span class="name">Jane Doe</span>
+            <button class="add-button small-button">Add</button>
+		</div>
+        <div class="user cf" data-id="12345">
+            <img src="avatar.png" alt="Generic avatar"/>
+            <span class="name">Dan Doe</span>
+            <button class="add-button small-button">Add</button>
+        </div>
+        <div class="user cf" data-id="123456">
+            <img src="avatar.png" alt="Generic avatar"/>
+            <span class="name">Danielle Doe</span>
+            <button class="add-button small-button">Add</button>
+        </div>
+        <div class="user cf" data-id="1234567">
+            <img src="avatar.png" alt="Generic avatar"/>
+            <span class="name">Mike Doe</span>
+            <button class="add-button small-button">Add</button>
+        </div>
+        <div class="user cf" data-id="12345678">
+            <img src="avatar.png" alt="Generic avatar"/>
+            <span class="name">Leah Doe</span>
+            <button class="add-button small-button">Add</button>
+        </div>
+    </div>
+
+    <h3 id="accessing">Accessing tags</h3>
+        <p>You'll inevitably want to <em>do</em> something with those tags in the field once a user is finished entering them. In most cases, you'll probably want to send them to your server via an AJAX call. Luckily, Tag-This keeps an updated record of all of the tags in a given field via the 'tags' array!<br><br>The 'tags' array is an array of objects- each object contains the 'id' and 'text' of a tag. <br><br> To grab that array, just do this: </p>
+
+        <pre><code>var tags = $('#my-input').data('tags');</code></pre>
+
+    <div class="example">
+        <p>Click 'see code' below to view an example of the 'tags' array that would be returned if you tagged all the users in the last example above.</p>
+        <br>
+        <button class="see-code-button small-button">see code</button>
+
+
+
+
+<pre><code>[
+  {
+    id : 123,
+    text : "John Doe"
+  },
+  {
+    id : 1234,
+    text : "Jane Doe"
+  },
+  {
+    id : 12345,
+    text : "Dan Doe"
+  },
+  {
+    id : 123456,
+    text : "Danielle Doe"
+  },
+  {
+    id : 1234567,
+    text : "Mike Doe"
+  },
+  {
+    id : 12345678,
+    text : "Leah Doe"
+  }
+]</code></pre>
+
+
+
+
+
+    </div>
+
+    <div class="example">
+        <p>Now that you have your array in the <code>tags</code> variable, you can easily send them to the server over AJAX. For example:</p>
+        <br>
+        <button class="see-code-button small-button">see code</button>
+
+
+
+<pre><code>$.ajax({
+  type: "POST",
+  url: '/some-endpoint',
+  data : tags
+});</code></pre>
+
+
+
+    </div>
+
+    <h3>Options</h3>
+    <p>Below are the options you can pass to Tag-This to customize it to your preference. See the <a title="jQuery Tag This GitHub page" href="https://github.com/dangribbin/jQuery-Tag-This" target="_blank">docs page</a> for everything you need to know about Tag-This.</p>
+    <ul class="option-list">
+        <li><code>interactive : boolean</code> - <span class="text">Allow the user to type to create tags.</span></li>
+        <li><code>email : boolean</code> - <span class="text">Validate tags as email addresses (and disallow invalid email addresses).</span></li>
+        <li><code>regex : pattern</code> - <span class="text">Validate tags against a custom regex pattern.</span></li>
+        <li><code>defaultText : boolean</code> - <span class="text">The placeholder text that will show up in an interactive text input box.</span></li>
+        <li><code>createTagWith : string</code> - <span class="text">An extra delimiter that you can use to trigger the creation of a tag.</span></li>
+        <li><code>noDuplicates : boolean</code> - <span class="text">Prevent duplicate tags from being entered.</span></li>
+        <li><code>removeWithBackspace : boolean</code> - <span class="text">Remove the last tag in an interactive input with the backspace key.</span></li>
+        <li><code>maxTags : integer</code> - <span class="text">Only create a tag if the number of tags in a given Tag-This field is less than or equal to this number.</span> </li>
+        <li><code>maxChars : integer</code> - <span class="text">Only create a tag if the number of characters entered in an interactive input is less than or equal to this number.</span></li>
+        <li><code>width : string</code> - <span class="text">The width of the container the tags go into.</span></li>
+        <li><code>height : string</code> - <span class="text">The height of the container the tags go into.</span></li>
+        <li><code>hideOriginal : boolean</code> - <span class="text">Hide the element you called tagThis() on (since tagThis creates its own)</span></li>
+    </ul>
+
+    <h3>Issues</h3>
+
+    <p>Tag-This will work in IE7+ and in all modern desktop browsers, as well as most versions of iOS and Android. </p>
+
+    <p>If this demo page doesn't work in your browser or you have problems with a supported browser, file an <a title="jQuery Tag This issues page" href="https://github.com/dangribbin/jQuery-Tag-This/issues" target="_blank">issue on GitHub</a> and I'll look into it.</p>
+
+
+    <h3 id="bower">Installing via Bower</h3>
+
+    <p>You can install Tag-This from <a href="http://bower.io/">Bower</a>, too! Run this line from your terminal if you have Bower installed:</p>
+
+    <pre><code>bower install jQuery-Tag-This</code></pre>
+    
+    <br>
+    
+    <p>jQuery Tag-This is written and maintained by Dan Gribbin. Get in touch on <a title="Dan Gribbin Twitter" href="http://www.twitter.com/dangribbin" target="_blank">twitter.</a></p>
+
+    <a href="https://github.com/dangribbin/jQuery-Tag-This" target="_blank" class="fork-me-link"><img src="https://github-camo.global.ssl.fastly.net/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"></a>
+
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+
+          //if you're demoing this locally, these won't fire.
+
+          ga('create', 'UA-48520160-1', 'dangribbin.net');
+          ga('send', 'pageview');
+
+        </script>
+
+        <script src="../lib/jquery-1.11.0.min.js"></script>
+        <script src="../dist/jquery.tagthis.js"></script>
+		<script src="main.js"></script>
+        <script src="prism.js"></script>
+
+	</body>
+</html>
