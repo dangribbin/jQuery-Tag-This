@@ -41,6 +41,7 @@
             if (settings.hideOriginal) {
                 $(this).hide();
             }
+
             var id = $(this).attr('id');
 
             if (!id || createTagWith[$(this).attr('id')]) {
@@ -89,11 +90,14 @@
 
                 fakeInputElement.val(fakeInputElement.attr('data-default'));
 
-                $(data.wrapper).on('click',data,function(event) {
+                $(data.wrapper).on( 'click', data, function(event) {
                     $(event.data.fakeInput).focus();
                 });
 
-                fakeInputElement.on('focus',data,function(event) {
+
+                //attach event handlers
+
+                fakeInputElement.on( 'focus', data, function(event) {
                     var fakeInput = $(event.data.fakeInput);
                     if (fakeInput.val()===fakeInput.attr('data-default')) {
                         fakeInput.val('');
@@ -101,7 +105,7 @@
                 });
 
                 // if a user tabs out of the field, create a new tag
-                fakeInputElement.on('blur',data,function(event) {
+                fakeInputElement.on( 'blur', data, function(event) {
                     var defaultText = $(this).attr('data-default');
                     var fakeInput = $(event.data.fakeInput);
                     var fakeInputVal = fakeInput.val();
@@ -116,7 +120,7 @@
 
 
                 // if user types a comma, create a new tag
-                fakeInputElement.on('keypress',data,function(event) {
+                fakeInputElement.on( 'keypress', data, function(event) {
                     
                     var fakeInput = $(event.data.fakeInput);
                     var fakeInputVal = fakeInput.val();
@@ -131,14 +135,15 @@
 
                 });
 
-                fakeInputElement.on('keyup',data,function(event){
+                fakeInputElement.on( 'keyup', data, function(event){
                     var fakeInput = $(event.data.fakeInput);
                     $(this).autosizeInput(fakeInput);
                 });
 
                 //Delete last tag on backspace
                 if (data.removeWithBackspace){
-                    fakeInputElement.on('keydown', function(event){
+
+                    fakeInputElement.on( 'keydown', function(event){
                         if(event.keyCode === 8 && $(this).val() === ''){
                             
                             event.preventDefault();
@@ -159,11 +164,12 @@
                             $(this).trigger('focus');
                         }
                     });
+
                 }
 
                 //fakeInputElement.blur();
 
-                fakeInputElement.on('keydown', function(event){
+                fakeInputElement.on( 'keydown', function(event){
                     if(event.keyCode === 8){
                         $(this).removeClass('tag-this--invalid');
                     }
@@ -172,12 +178,13 @@
 
                 //Removes the tag-this--invalid class when user changes the value of the fake input
                 if(data.noDuplicates) {
-                    fakeInputElement.keydown(function(event){
+                    fakeInputElement.on('keydown', function(event){
                         if(event.keyCode === 8 || String.fromCharCode(event.which).match(/\w+|[áéíóúÁÉÍÓÚñÑ,/]+/)) {
                             $(this).removeClass('tag-this--invalid');
                         }
                     });
                 }
+
             } // if settings.interactive
 
         });
@@ -202,17 +209,8 @@
 
             //get ID of this particular input
             var id = $(this).attr('id');
-            var isEmail = $(this).data('type') === 'email';
             var tagIsInvalid = false;
-            var tag, tags, func, dataToPass, errors = {};
-
-            //initialize errors
-            errors.maxTagsReached = false;
-            errors.maxCharsReached = false;
-            errors.failedCustomRegex = false;
-            errors.emailIsInvalid = false;
-            errors.isDuplicate = false;
-            settings.email = isEmail;
+            var tag, tags, func, dataToPass;
 
             //clear an existing error
             $('#'+id+'--tag').removeClass('tag-this--invalid');
@@ -228,6 +226,7 @@
                 tags = existingTags;
             }
 
+            //call a beforeAddTag callback if it was set in the settings
             if (settings.callbacks && callbacks[id] && callbacks[id]['beforeAddTag']) {
                 func = callbacks[id]['beforeAddTag'];
                 dataToPass = {
@@ -238,72 +237,15 @@
                 func.call(this, dataToPass);
             }
 
-            //begin validation
-                
-                //if there's a custom regex pattern, validate against it
-                if (settings.regex && !isEmail && !data.id){
-                    var failedCustomRegex = $(this).failedCustomRegex(data, settings);
-                    if (failedCustomRegex){
-                        tagIsInvalid = true;
-                        errors.failedCustomRegex = true;
-                    }
-                }
-
-                //if this is an email, validate it
-                if (isEmail) {
-
-                    var emailIsInvalid = $(this).emailIsInvalid(data);
-                    
-                    //if it's not valid, set the option to pass into the error method
-                    if (emailIsInvalid){
-                        tagIsInvalid = true;
-                        errors.emailIsInvalid = true;
-                    }
-                }
-
-                //if we don't allow dupes, check for dupes
-                if (settings.noDuplicates) {
-
-                    var tagIsDuplicate = $(this).tagExists(settings, data);
-
-                    if ( tagIsDuplicate === true ) {
-                        //Indicate to the user that this is not a valid tag
-                        tagIsInvalid = true;
-                        errors.isDuplicate = true;
-                    }
-                }
-
-                //if we care about a max count of tags, check to see if we're at the limit
-                if (settings.maxTags && settings.maxTags === tags.length){
-                    tagIsInvalid = true;
-                    errors.maxTagsReached = true;
-                }
-
-                //if we care about max chars, check to see if we're at the limit
-                if (settings.maxChars > 0) {
-
-                    var maxCharsReached = false;
-
-                    if (data.id){
-                        maxCharsReached = data.text.length > settings.maxChars;
-                    }
-                    else{
-                        maxCharsReached = data.length > settings.maxChars;
-                    }
-
-                    if (maxCharsReached){
-                        errors.maxCharsReached = true;
-                        tagIsInvalid = true;
-                    }
-                }
-
+            //validation
+            var tagValidationInfo = $(this).validateAddTag(data, settings, tags);
 
             //if the tag is invalid, indicate to the user
-            if ( tagIsInvalid ) {
+            if ( tagValidationInfo.tagIsInvalid ) {
                 tag = $('#'+id+'--tag');
                 tag.addClass('tag-this--invalid');
                 tag.trigger('focus');
-                $(this).relayError(id, data, settings, tags, errors);
+                $(this).relayError(id, data, settings, tags, tagValidationInfo.errors);
                 return false;
             }
 
@@ -337,6 +279,7 @@
                         return $('#' + id).removeTag(data);
                     }))
                 .insertBefore('#' + id + '--addTag');
+
                 //update the tags array
                 tags.push(data);
 
@@ -349,7 +292,7 @@
                 tag.trigger('focus');
                 $(this).resetInputSize(tag);
 
-                //call any callbacks we were passed
+                //call any callbacks we were passed for afterAddTag
                 if (settings.callbacks && callbacks[id] && callbacks[id]['afterAddTag']) {
                     func = callbacks[id]['afterAddTag'];
                     dataToPass = {
@@ -374,6 +317,84 @@
         });
 
         return false;
+    };
+
+    $.fn.validateAddTag = function(data, settings, tags){
+
+        var errors = {}, tagIsInvalid, tagValidationInfo;
+
+        //initialize errors
+        errors.maxTagsReached = false;
+        errors.maxCharsReached = false;
+        errors.failedCustomRegex = false;
+        errors.emailIsInvalid = false;
+        errors.isDuplicate = false;
+
+
+        //if there's a custom regex pattern, validate against it
+        if (settings.regex && !settings.email && !data.id){
+            var failedCustomRegex = $(this).failedCustomRegex(data, settings);
+            if (failedCustomRegex){
+                tagIsInvalid = true;
+                errors.failedCustomRegex = true;
+            }
+        }
+
+        //if this is an email, validate it
+        if (settings.email) {
+
+            var emailIsInvalid = $(this).emailIsInvalid(data);
+            
+            //if it's not valid, set the option to pass into the error method
+            if (emailIsInvalid){
+                tagIsInvalid = true;
+                errors.emailIsInvalid = true;
+            }
+        }
+
+        //if we don't allow dupes, check for dupes
+        if (settings.noDuplicates) {
+
+            var tagIsDuplicate = $(this).tagExists(settings, data);
+
+            if ( tagIsDuplicate === true ) {
+                //Indicate to the user that this is not a valid tag
+                tagIsInvalid = true;
+                errors.isDuplicate = true;
+            }
+        }
+
+        //if we care about a max count of tags, check to see if we're at the limit
+        if (settings.maxTags && settings.maxTags === tags.length){
+            tagIsInvalid = true;
+            errors.maxTagsReached = true;
+        }
+
+        //if we care about max chars, check to see if we're at the limit
+        if (settings.maxChars > 0) {
+
+            var maxCharsReached = false;
+
+            if (data.id){
+                maxCharsReached = data.text.length > settings.maxChars;
+            }
+            else{
+                maxCharsReached = data.length > settings.maxChars;
+            }
+
+            if (maxCharsReached){
+                errors.maxCharsReached = true;
+                tagIsInvalid = true;
+            }
+        }
+
+        tagValidationInfo = {
+            tagIsInvalid : tagIsInvalid,
+            errors : errors
+        }
+
+
+        return tagValidationInfo;
     };
 
     $.fn.removeTag = function(data) {
@@ -405,6 +426,7 @@
                     //remove the physical tag
                     $('#tag-this--'+ id +' .tag[data-id="'+ data.id +'"]').remove();
 
+                    //remove it from the object
                     for (var i=0; i < tags.length; i++) {
                         if (tags[i].id === data.id) {
                             tags.splice(i, 1);
@@ -413,13 +435,13 @@
                 }
                 //otherwise just find the text to determine which tag to remove
                 else{
-
+                    //remove physical tag
                     $('#tag-this--'+ id +' .tag').each(function(){
                         if ($(this).find('span').text() === data){
                             $(this).remove();
                         }
                     });
-
+                    //remove from object
                     for (var n=0; n < tags.length; n++) {
                         if (tags[n].text === data) {
                             tags.splice(n, 1);
@@ -427,7 +449,7 @@
                     }
                 }
 
-
+                //since we just removed the deleted tag from the object, re-store the new object on the input
                 $(this).data('tags', tags);
 
                 //call any callbacks we passed
@@ -494,13 +516,12 @@
         return false;
     };
 
-
     $.fn.autosizeInput = function(input){
 
-        var a = input.width(), newWidth;
+        var inputWidth = input.width(), newWidth;
 
-        if(input[0].scrollWidth - a > 0){
-            newWidth = a + 30;
+        if(input[0].scrollWidth - inputWidth > 0){
+            newWidth = inputWidth + 30;
         }
 
         input.css("width", newWidth);
@@ -537,7 +558,7 @@
         }
     };
 
-    $.fn.relayError = function(id, data, settings, tags, error){
+    $.fn.relayError = function(id, data, settings, tags, errors){
 
         //call any callbacks we passed
         if (settings.callbacks && callbacks[id] && callbacks[id]['errors']) {
@@ -547,7 +568,7 @@
                 attemptedToTag : data,
                 settings : settings,
                 tags : tags,
-                errors : error
+                errors : errors
             };
 
             var func = callbacks[id]['errors'];
@@ -574,7 +595,6 @@
         }
         
         $(this).resetInputSize(input);
-
     };
 
     $.fn.tagThis.generateUniqueTagId = function(tags) {
@@ -592,11 +612,13 @@
     };
 
     $.fn.destroy = function(){
+        //destroys this input
         $(this).next().remove();
         $(this).show();
     }
 
     $.tagThisDestroyAll = function(){
+        //destroys all inputs
         $('.tag-this').each(function(){
             $(this).prev().show();
             $(this).remove();
