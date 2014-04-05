@@ -1,7 +1,7 @@
 *{
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
-    box-sizing: border-box; 
+    box-sizing: border-box;
 }
 
 html{
@@ -204,9 +204,9 @@ p{
 
 
 .fork-me-link img{
-    position: absolute; 
-    top: 0; 
-    right: 0; 
+    position: absolute;
+    top: 0;
+    right: 0;
     border: 0;
 }
 
@@ -222,6 +222,31 @@ p{
     .fork-me-link {
         display: none;
     }
+}
+
+.ui-autocomplete{
+  color: #ccc;
+  background: white;
+  z-index: 7 !important;
+}
+
+.ui-autocomplete a{
+  color: black;
+}
+
+.ui-state-focus {
+  background: #ccc;
+}
+
+.ui-menu {
+  border: 1px solid black;
+  border-radius: 2px;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+}
+
+.ui-menu-item:not(:last-child){
+  border-bottom: 1px solid gray;
 }
 
 

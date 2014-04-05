@@ -26,13 +26,20 @@ $('#user-tags').tagThis({
     }
 });
 
+$('#fruit-tags').tagThis({
+    autocompleteSource : window.fruitList,
+    callbacks: {
+        afterAddTag : tagAdded
+    }
+});
+
 $('.add-button').on('click', function(){
 
     var tagData = {
         text : $(this).siblings('.name').text(),
         id : $(this).parent().data('id')
     };
-  
+
     $('#user-tags').addTag(tagData);
     ga('send', 'event', 'add tag button', 'click', 'user example' );
 });
@@ -60,7 +67,12 @@ $('.email-clear-all-button').on('click', function(){
     ga('send', 'event', 'clear all button', 'click', 'email example');
 });
 
-$('a').on('click', function(e){
+$('.fruit-clear-all-button').on('click', function(){
+    $('#fruit-tags').clearAllTags();
+    ga('send', 'event', 'clear all button', 'click', 'autocomplete example');
+});
+
+$('a').on('click', function(){
     var href = $(this).attr('href');
     ga('send', 'event', 'external link', 'click', href);
 });

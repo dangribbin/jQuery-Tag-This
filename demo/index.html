@@ -4,13 +4,16 @@
         <title>jQuery Tag-This</title>
         <link rel="stylesheet" href="prism.css">
         <link href='http://fonts.googleapis.com/css?family=Roboto+Slab:400,700,300' rel='stylesheet' type='text/css'>
-		<link rel="stylesheet" href="../dist/jquery-tag-this.css">
-        <link rel="stylesheet" href="style.css">
+				<link rel="stylesheet" href="../dist/jquery-tag-this.css?v=5">
+				<link rel="stylesheet" href="../lib/jquery-ui-1.9.2.custom.min.css">
+        <link rel="stylesheet" href="style.css?v=5">
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0 maximum-scale=1.0 user-scalable=no" />
         <meta name="Description" content="jQuery Tag-This is a simple-yet-powerful plugin that turns text into tags"/>
 	</head>
 	<body>
+
+	<script>var fruitList = ["apple","orange","pear","pomegranate","peach", "plum", "banana","lemon", "lime", "kiwi", "watermelon", "mango", "melon", "cherry", "apricot"];</script>
 
     <h1>jQuery Tag-This</h1>
 
@@ -18,24 +21,20 @@
 
 
     <h3>Examples:</h3>
-    
+
+
+
     <div class="example">
         <label for="simple-tags">Here's the simplest way to use Tag-This. Type some text and get a tag!</label>
         <input type="text" id="simple-tags" name="simple-tags">
         <button class="simple-clear-all-button small-button">clear all</button>
         <button class="see-code-button small-button">see code</button>
-
-
-
 <pre>
 <code>//set up Tag-This on our input (just call this once on page load)
 $('#simple-tags').tagThis()
 
 //that's it! type in the input above to see it in action.</code>
 </pre>
-
-
-
 
     </div>
 
@@ -44,7 +43,7 @@ $('#simple-tags').tagThis()
 
         <label for="email-tags">This example takes email addresses, and displays an error state when an invalid or duplicate email address was entered.</label>
     	<input name="email-tags" id="email-tags" />
-    
+
         <button class="email-clear-all-button small-button">clear all</button>
         <button class="see-code-button small-button">see code</button>
 
@@ -53,16 +52,40 @@ $('#simple-tags').tagThis()
 <code>//set up Tag-This on our input (just call this once on page load)
 $('#email-tags').tagThis({
     email : true,
-    noDuplicates : true 
+    noDuplicates : true
 });</code>
 </pre>
 
 
     </div>
-    
+
+
+
+		<div class="example" id="autocomplete">
+
+				<label for="fruit-tags">Tag-This can use jQuery UI's <b>Autocomplete</b> functionality too! Try typing the first few letters of the name of a fruit and select an item from the list to create a tag. </label>
+				<input name="fruit-tags" id="fruit-tags" />
+
+				<button class="fruit-clear-all-button small-button">clear all</button>
+				<button class="see-code-button small-button">see code</button>
+
+
+<pre>
+<code>//source to match user input against for autocomplete
+var tags = ["apple","orange","pear","pomegranate","peach", "plum", "banana","lemon", "lime"];
+
+//just set the source you need for autocomplete. jQuery UI handles the rest.
+$('#fruit-tags').tagThis({
+	autocompleteSource : fruitList
+});</code>
+</pre>
+		</div>
+
+
+
 
     <div class="example">
-    
+
         <label for="user-tags">Below is an example of creating tags programmatically. Click an 'Add' button below to add tags, then click 'see code' to see how it's done.</label>
 
         <input name="user-tags" id="user-tags" />
@@ -75,7 +98,7 @@ $('#email-tags').tagThis({
 <code>//set up Tag-This on our input (just call this once on page load)
 $('#user-tags').tagThis({
     interactive: false,
-    noDuplicates: true 
+    noDuplicates: true
 });
 
 //set up our click handler on a button on our page
@@ -85,7 +108,7 @@ $('.add-button').on('click', function(){
     //Your code may look slightly different than this, but here's away to construct an object with an ID that Tag-This will accept.
     var tagData = {
         text : $(this).siblings('.name').text(),
-        id : $(this).parent().data('id') 
+        id : $(this).parent().data('id')
     }
 
     //We have our object- let's pass it to Tag-This's 'addTag' method
@@ -98,9 +121,7 @@ $('.add-button').on('click', function(){
 
 
 
-
-
-        <br>
+    <br>
 		<div class="user cf" data-id="123">
             <img src="avatar.png" alt="Generic avatar"/>
             <span class="name">John Doe</span>
@@ -143,9 +164,6 @@ $('.add-button').on('click', function(){
         <br>
         <button class="see-code-button small-button">see code</button>
 
-
-
-
 <pre><code>[
   {
     id : 123,
@@ -174,9 +192,6 @@ $('.add-button').on('click', function(){
 ]</code></pre>
 
 
-
-
-
     </div>
 
     <div class="example">
@@ -184,21 +199,18 @@ $('.add-button').on('click', function(){
         <br>
         <button class="see-code-button small-button">see code</button>
 
-
-
 <pre><code>$.ajax({
   type: "POST",
   url: '/some-endpoint',
   data : tags
 });</code></pre>
 
-
-
     </div>
 
     <h3>Options</h3>
     <p>Below are the options you can pass to Tag-This to customize it to your preference. See the <a title="jQuery Tag This GitHub page" href="https://github.com/dangribbin/jQuery-Tag-This" target="_blank">docs page</a> for everything you need to know about Tag-This.</p>
     <ul class="option-list">
+				<li><code>autocompleteSource : variable or URL</code> - <span class="text">Use jQuery UI's Autocomplete functionality to suggest tags as a user types.</span></li>
         <li><code>interactive : boolean</code> - <span class="text">Allow the user to type to create tags.</span></li>
         <li><code>email : boolean</code> - <span class="text">Validate tags as email addresses (and disallow invalid email addresses).</span></li>
         <li><code>regex : pattern</code> - <span class="text">Validate tags against a custom regex pattern.</span></li>
@@ -225,9 +237,9 @@ $('.add-button').on('click', function(){
     <p>You can install Tag-This from <a href="http://bower.io/">Bower</a>, too! Run this line from your terminal if you have Bower installed:</p>
 
     <pre><code>bower install jQuery-Tag-This</code></pre>
-    
+
     <br>
-    
+
     <p>jQuery Tag-This is written and maintained by Dan Gribbin. Get in touch on <a title="Dan Gribbin Twitter" href="http://www.twitter.com/dangribbin" target="_blank">twitter.</a></p>
 
     <a href="https://github.com/dangribbin/jQuery-Tag-This" target="_blank" class="fork-me-link"><img src="https://github-camo.global.ssl.fastly.net/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"></a>
@@ -244,10 +256,10 @@ $('.add-button').on('click', function(){
           ga('send', 'pageview');
 
         </script>
-
         <script src="../lib/jquery-1.11.0.min.js"></script>
-        <script src="../dist/jquery.tagthis.js"></script>
-		<script src="main.js"></script>
+        <script src="../lib/jquery-ui-1.9.2.custom.min.js"></script>
+        <script src="../dist/jquery.tagthis.js?v=5"></script>
+				<script src="main.js?v=5"></script>
         <script src="prism.js"></script>
 
 	</body>

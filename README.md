@@ -142,7 +142,19 @@ You'll get an array that looks like this:
 
 Options
 =======
-**jQuery.tagThis** has many options you can set. Below you can see what they are and what the default is.
+**jQuery.tagThis** has many options you can set. 
+
+Below you can see what they are and what the default is.
+
+
+** `option : example value`**
+
+----
+
+
+**`autocompleteSource : someListOrUrl` **
+
+*url or variable* - the source for jQuery UI's autocomplete functionality [More Autocomplete Info](#autocomplete)
 
 **`interactive : true`**
 
@@ -191,6 +203,20 @@ Options
 **`hideOriginal : true`**
 
 *boolean* - Hide the element you called `tagThis()` on (since tagThis creates its own) Default is `true`
+
+
+Autocomplete
+============
+
+Tag-This can utilize jQuery UI's Autocomplete functionality. You can implement it quite easily. You'll just need to provide CSS styling for the list. 
+
+To get autocomplete working, simply set the autocompleteSource option, and you're good to go. For example:
+
+	$('#fruit-input').tagThis({
+		autocompleteSource : fruitList
+	});
+	
+See [the demo page](http://www.dangribbin.net/jquery-tag-this/#autocomplete) for a live example!
 
 Styling
 =======

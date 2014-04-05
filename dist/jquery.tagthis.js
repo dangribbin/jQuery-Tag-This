@@ -35,7 +35,7 @@
         },options);
 
         this.each(function() {
-            
+
             $(this).data('settings', settings);
 
             if (settings.hideOriginal) {
@@ -84,7 +84,11 @@
 
             if (settings.interactive) {
 
+                //fake input is what the user types in (created by the plugin)
                 var fakeInputElement = $(data.fakeInput);
+
+                //real input is the input you called tagThis() on.
+                var realInputElement = $(data.realInput);
 
                 originalInputWidth = fakeInputElement.css('width');
 
@@ -104,6 +108,30 @@
                     }
                 });
 
+
+
+                //autocomplete functionality
+
+                if (settings.autocompleteSource) {
+
+                    var autocompleteSettings = {
+                        source: settings.autocompleteSource,
+                        select: function( event, ui ) {
+                            event.preventDefault();
+                            realInputElement.addTag(ui.item.value);
+                            fakeInputElement.focus();
+                        }
+                    };
+
+                    if (jQuery.ui.autocomplete) {
+                        fakeInputElement.autocomplete(autocompleteSettings);
+                    }
+                    else{
+                        throw new Error("jQuery-Tag-This is missing the jQuery UI dependecy needed for autocomplete to work. If you don't need autocomplete, don't set the autocompleteSource setting.");
+                    }
+                }
+
+
                 // if a user tabs out of the field, create a new tag
                 fakeInputElement.on( 'blur', data, function(event) {
                     var defaultText = $(this).attr('data-default');
@@ -121,12 +149,12 @@
 
                 // if user types a comma, create a new tag
                 fakeInputElement.on( 'keypress', data, function(event) {
-                    
+
                     var fakeInput = $(event.data.fakeInput);
                     var fakeInputVal = fakeInput.val();
 
                     $(this).autosizeInput(fakeInput);
-                    
+
                     if ( event.which === event.data.createTagWith.charCodeAt(0) || event.which === 13 ) {
                         event.preventDefault();
                         $(event.data.realInput).addTag(fakeInputVal);
@@ -145,9 +173,9 @@
 
                     fakeInputElement.on( 'keydown', function(event){
                         if(event.keyCode === 8 && $(this).val() === ''){
-                            
+
                             event.preventDefault();
-                            
+
                             var tagToRemove = $(this).closest('.tag-this').find('.tag:last');
                             var tagText = tagToRemove.text();
                             var tagId = tagToRemove.data('id');
@@ -233,7 +261,7 @@
                     context : $(this),
                     tags : tags,
                     attemptedInput : data
-                }
+                };
                 func.call(this, dataToPass);
             }
 
@@ -299,7 +327,7 @@
                         context : $(this),
                         tags : tags,
                         addedInput : data
-                    }
+                    };
                     func.call(this, dataToPass);
                 }
                 if(callbacks[id] && callbacks[id]['onChange'])
@@ -309,7 +337,7 @@
                         context : $(this),
                         tags : tags,
                         addedInput : data
-                    }
+                    };
                     func.call(this, dataToPass);
                 }
             }
@@ -344,7 +372,7 @@
         if (settings.email) {
 
             var emailIsInvalid = $(this).emailIsInvalid(data);
-            
+
             //if it's not valid, set the option to pass into the error method
             if (emailIsInvalid){
                 tagIsInvalid = true;
@@ -391,7 +419,7 @@
         tagValidationInfo = {
             tagIsInvalid : tagIsInvalid,
             errors : errors
-        }
+        };
 
 
         return tagValidationInfo;
@@ -402,7 +430,7 @@
         this.each(function() {
 
             var id = $(this).attr('id');
-            var func, dataToPass;
+            var func, dataToPass, tags;
 
             //call the before callback
             if (callbacks[id] && callbacks[id]['beforeRemoveTag']) {
@@ -411,12 +439,12 @@
                     context : $(this),
                     tags : tags,
                     inputToBeRemoved : data
-                }
+                };
                 func.call(this, dataToPass);
             }
 
-            var tags = $(this).data('tags');
-            
+            tags = $(this).data('tags');
+
             //remove the tag from the data attribute
             if (tags){
 
@@ -459,7 +487,7 @@
                         context : $(this),
                         tags : tags,
                         removedInput : data
-                    }
+                    };
                     func.call(this, dataToPass);
                 }
                 if(callbacks[id] && callbacks[id]['onChange'])
@@ -469,7 +497,7 @@
                         context : $(this),
                         tags : tags,
                         removedInput : data
-                    }
+                    };
                     func.call(this, dataToPass);
                 }
             }
@@ -524,15 +552,15 @@
             newWidth = inputWidth + 30;
         }
 
-        input.css("width", newWidth);
-    }
+        input.css('width', newWidth);
+    };
 
     $.fn.resetInputSize = function(input){
         input.css('width', originalInputWidth);
     }
-
+;
     $.fn.emailIsInvalid = function(email) {
-        
+
         // regex to check an email. this should always be checked on the server as well.
         var valid = emailRegex.test(email);
 
@@ -562,7 +590,7 @@
 
         //call any callbacks we passed
         if (settings.callbacks && callbacks[id] && callbacks[id]['errors']) {
-            
+
             var returnData = {
                 id : id,
                 attemptedToTag : data,
@@ -593,7 +621,7 @@
             incompleteTag.removeClass('tag-this--invalid').val(defaultText);
             incompleteTag.trigger('blur');
         }
-        
+
         $(this).resetInputSize(input);
     };
 
@@ -601,7 +629,7 @@
         var min = 1;
         var max = 7000;
         var random = Math.floor(Math.random() * (max - min + 1)) + min;
-        
+
         //make sure id doesn't already exist
         for (var i=0; i < tags.length; i++) {
             if (tags[i].id === random && i < 1000) {
@@ -615,7 +643,7 @@
         //destroys this input
         $(this).next().remove();
         $(this).show();
-    }
+    };
 
     $.tagThisDestroyAll = function(){
         //destroys all inputs
@@ -623,6 +651,6 @@
             $(this).prev().show();
             $(this).remove();
         });
-    }
+    };
 
 })(jQuery);
