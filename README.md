@@ -147,12 +147,12 @@ Options
 Below you can see what they are and what the default is.
 
 
-** `option : example value`**
+**`option : example value`**
 
 ----
 
 
-**`autocompleteSource : someListOrUrl` **
+**`autocompleteSource : someListOrUrl`**
 
 *url or variable* - the source for jQuery UI's autocomplete functionality [More Autocomplete Info](#autocomplete)
 
