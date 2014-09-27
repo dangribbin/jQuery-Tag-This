@@ -106,8 +106,36 @@
                     if (fakeInput.val()===fakeInput.attr('data-default')) {
                         fakeInput.val('');
                     }
-                });
+                }).on( 'keyup.arrowKeys', function(e){
+                    var parent = $(this).parent();
 
+                    if ( e.which === 37 && $(this).val() === '' ) { //left
+                        var tagToSwapWith = parent.prev('.tag');
+                        if ( tagToSwapWith ) {
+                            parent.after(tagToSwapWith);
+                        }
+                    }
+                    else if ( e.which === 39 && $(this).val() === '' ) { //right
+                        var tagToSwapWith = parent.next('.tag');
+                        if ( tagToSwapWith ) {
+                            parent.before(tagToSwapWith);
+                        }
+                    }
+                    else if ( e.keyCode === 8 && $(this).val() === '' ) {
+                        var tagToDelete = parent.prev('.tag');
+
+                        if ( tagToDelete ) {
+                            tagToDelete.find('.tag-this--remove-tag').trigger('click');
+                        }
+                    }
+                    else if ( e.keyCode === 46 && $(this).val() === '' ) {
+                        var tagToDelete = parent.next('.tag');
+
+                        if ( tagToDelete ) {
+                            tagToDelete.find('.tag-this--remove-tag').trigger('click');
+                        }
+                    }
+                });
 
 
                 //autocomplete functionality
@@ -169,31 +197,31 @@
                 });
 
                 //Delete last tag on backspace
-                if (data.removeWithBackspace){
+                // if (data.removeWithBackspace){
 
-                    fakeInputElement.on( 'keydown', function(event){
-                        if(event.keyCode === 8 && $(this).val() === ''){
+                //     fakeInputElement.on( 'keydown', function(event){
+                //         if(event.keyCode === 8 && $(this).val() === ''){
 
-                            event.preventDefault();
+                //             event.preventDefault();
 
-                            var tagToRemove = $(this).closest('.tag-this').find('.tag:last');
-                            var tagText = tagToRemove.text();
-                            var tagId = tagToRemove.data('id');
+                //             var tagToRemove = $(this).closest('.tag-this').find('.tag:last');
+                //             var tagText = tagToRemove.text();
+                //             var tagId = tagToRemove.data('id');
 
-                            var elId = $(this).attr('id').replace(/--tag$/, '');
+                //             var elId = $(this).attr('id').replace(/--tag$/, '');
 
-                            var tagData = {
-                                id : tagId,
-                                text : tagText
-                            };
+                //             var tagData = {
+                //                 id : tagId,
+                //                 text : tagText
+                //             };
 
-                            $('#' + elId).removeTag(tagData);
-                            $(this).removeClass('tag-this--invalid');
-                            $(this).trigger('focus');
-                        }
-                    });
+                //             $('#' + elId).removeTag(tagData);
+                //             $(this).removeClass('tag-this--invalid');
+                //             $(this).trigger('focus');
+                //         }
+                //     });
 
-                }
+                // }
 
                 //fakeInputElement.blur();
 
@@ -557,8 +585,8 @@
 
     $.fn.resetInputSize = function(input){
         input.css('width', originalInputWidth);
-    }
-;
+    };
+
     $.fn.emailIsInvalid = function(email) {
 
         // regex to check an email. this should always be checked on the server as well.
