@@ -17,7 +17,8 @@
     callbacks = [],
     createTagWith = [],
     emailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-    originalInputWidth;
+    originalInputWidth,
+    disallowedDelimeters = [37, 39, 8, 46];
 
     $.fn.tagThis = function(options) {
         var settings = jQuery.extend({
@@ -106,8 +107,36 @@
                     if (fakeInput.val()===fakeInput.attr('data-default')) {
                         fakeInput.val('');
                     }
-                });
+                }).on( 'keyup.arrowKeys', function(e){
+                    var parent = $(this).parent();
 
+                    if ( e.which === 37 && $(this).val() === '' ) { //left
+                        var tagToSwapWith = parent.prev('.tag');
+                        if ( tagToSwapWith ) {
+                            parent.after(tagToSwapWith);
+                        }
+                    }
+                    else if ( e.which === 39 && $(this).val() === '' ) { //right
+                        var tagToSwapWith = parent.next('.tag');
+                        if ( tagToSwapWith ) {
+                            parent.before(tagToSwapWith);
+                        }
+                    }
+                    else if ( e.keyCode === 8 && $(this).val() === '' ) {
+                        var tagToDelete = parent.prev('.tag');
+
+                        if ( tagToDelete ) {
+                            tagToDelete.find('.tag-this--remove-tag').trigger('click');
+                        }
+                    }
+                    else if ( e.keyCode === 46 && $(this).val() === '' ) {
+                        var tagToDelete = parent.next('.tag');
+
+                        if ( tagToDelete ) {
+                            tagToDelete.find('.tag-this--remove-tag').trigger('click');
+                        }
+                    }
+                });
 
 
                 //autocomplete functionality
@@ -147,7 +176,7 @@
                 });
 
 
-                // if user types a comma, create a new tag
+                // if user types a delimeter, create a new tag
                 fakeInputElement.on( 'keypress', data, function(event) {
 
                     var fakeInput = $(event.data.fakeInput);
@@ -155,7 +184,7 @@
 
                     $(this).autosizeInput(fakeInput);
 
-                    if ( event.which === event.data.createTagWith.charCodeAt(0) || event.which === 13 ) {
+                    if ( ( $.inArray(event.which, event.data.createTagWith) && !$.inArray(event.which, disallowedDelimeters) ) ||  event.which === 13 || event.which === 44 ) {
                         event.preventDefault();
                         $(event.data.realInput).addTag(fakeInputVal);
                         return false;
@@ -168,34 +197,6 @@
                     $(this).autosizeInput(fakeInput);
                 });
 
-                //Delete last tag on backspace
-                if (data.removeWithBackspace){
-
-                    fakeInputElement.on( 'keydown', function(event){
-                        if(event.keyCode === 8 && $(this).val() === ''){
-
-                            event.preventDefault();
-
-                            var tagToRemove = $(this).closest('.tag-this').find('.tag:last');
-                            var tagText = tagToRemove.text();
-                            var tagId = tagToRemove.data('id');
-
-                            var elId = $(this).attr('id').replace(/--tag$/, '');
-
-                            var tagData = {
-                                id : tagId,
-                                text : tagText
-                            };
-
-                            $('#' + elId).removeTag(tagData);
-                            $(this).removeClass('tag-this--invalid');
-                            $(this).trigger('focus');
-                        }
-                    });
-
-                }
-
-                //fakeInputElement.blur();
 
                 fakeInputElement.on( 'keydown', function(event){
                     if(event.keyCode === 8){
@@ -557,8 +558,8 @@
 
     $.fn.resetInputSize = function(input){
         input.css('width', originalInputWidth);
-    }
-;
+    };
+
     $.fn.emailIsInvalid = function(email) {
 
         // regex to check an email. this should always be checked on the server as well.
