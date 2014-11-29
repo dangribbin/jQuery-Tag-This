@@ -176,15 +176,15 @@
                 });
 
 
-                // if user types a comma, create a new tag
+                // if user types a delimeter, create a new tag
                 fakeInputElement.on( 'keypress', data, function(event) {
 
                     var fakeInput = $(event.data.fakeInput);
                     var fakeInputVal = fakeInput.val();
 
                     $(this).autosizeInput(fakeInput);
-debugger;
-                    if ( ( $.inArray(event.which, event.data.createTagWith) && !$.inArray(event.which, disallowedDelimeters) ) ||  event.which === 13 ) {
+
+                    if ( ( $.inArray(event.which, event.data.createTagWith) && !$.inArray(event.which, disallowedDelimeters) ) ||  event.which === 13 || event.which === 44 ) {
                         event.preventDefault();
                         $(event.data.realInput).addTag(fakeInputVal);
                         return false;
