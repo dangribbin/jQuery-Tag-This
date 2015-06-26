@@ -218,13 +218,23 @@
 
         });
 
-        if (options && options.width && options.height){
-            wrapper = $('#tag-this--'+this[0].id);
-
-            $(wrapper).css({
-                'width' : options.width,
-                'height' : options.height
-            });
+        if (options.width || options.height || options.margin) {
+            wrapper = $('#tag-this--' + this[0].id);
+            if (options.width) {
+                $(wrapper).css({
+                    'width': options.width
+                });
+            }
+            if (options.height) {
+                $(wrapper).css({
+                    'height': options.height
+                });
+            }
+            if (options.margin) {
+                $(wrapper).css({
+                    'margin': options.margin
+                });
+            }
         }
 
         return this;
