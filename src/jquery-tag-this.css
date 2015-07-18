@@ -54,7 +54,6 @@
     margin-right:5px; 
     margin-bottom:5px; 
     outline-color: white;
-    transition: .1s linear width;
 }
 
 .tag-this div { 
