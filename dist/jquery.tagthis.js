@@ -27,6 +27,7 @@
             createTagWith : ',',
             hideOriginal : true,
             noDuplicates : false,
+            caseInsensitiveValidation : false,
             removeWithBackspace : true,
             regex : '',
             maxChars : 0,
@@ -61,12 +62,12 @@
 
             if (settings.callbacks && (settings.callbacks.beforeAddTag || settings.callbacks.afterAddTag || settings.callbacks.onChange || settings.callbacks.afterRemoveTag || settings.callbacks.beforeRemoveTag || settings.callbacks.errors) ) {
                 callbacks[id] = [];
-                callbacks[id]['beforeAddTag'] = settings.callbacks.beforeAddTag;
-                callbacks[id]['afterAddTag'] = settings.callbacks.afterAddTag;
-                callbacks[id]['afterRemoveTag'] = settings.callbacks.afterRemoveTag;
-                callbacks[id]['onChange'] = settings.callbacks.onChange;
-                callbacks[id]['beforeRemoveTag'] = settings.callbacks.beforeRemoveTag;
-                callbacks[id]['errors'] = settings.callbacks.errors;
+                callbacks[id].beforeAddTag = settings.callbacks.beforeAddTag;
+                callbacks[id].afterAddTag = settings.callbacks.afterAddTag;
+                callbacks[id].afterRemoveTag = settings.callbacks.afterRemoveTag;
+                callbacks[id].onChange = settings.callbacks.onChange;
+                callbacks[id].beforeRemoveTag = settings.callbacks.beforeRemoveTag;
+                callbacks[id].errors = settings.callbacks.errors;
             }
 
             var html = '<div id="tag-this--' + id + '" class="tag-this"><div id="'+id+'--addTag">';
@@ -109,28 +110,28 @@
                     }
                 }).on( 'keyup.arrowKeys', function(e){
                     var parent = $(this).parent();
-
+                    var tagToSwapWith, tagToDelete;
                     if ( e.which === 37 && $(this).val() === '' ) { //left
-                        var tagToSwapWith = parent.prev('.tag');
+                        tagToSwapWith = parent.prev('.tag');
                         if ( tagToSwapWith ) {
                             parent.after(tagToSwapWith);
                         }
                     }
                     else if ( e.which === 39 && $(this).val() === '' ) { //right
-                        var tagToSwapWith = parent.next('.tag');
+                        tagToSwapWith = parent.next('.tag');
                         if ( tagToSwapWith ) {
                             parent.before(tagToSwapWith);
                         }
                     }
                     else if ( e.keyCode === 8 && $(this).val() === '' ) {
-                        var tagToDelete = parent.prev('.tag');
+                        tagToDelete = parent.prev('.tag');
 
                         if ( tagToDelete ) {
                             tagToDelete.find('.tag-this--remove-tag').trigger('click');
                         }
                     }
                     else if ( e.keyCode === 46 && $(this).val() === '' ) {
-                        var tagToDelete = parent.next('.tag');
+                        tagToDelete = parent.next('.tag');
 
                         if ( tagToDelete ) {
                             tagToDelete.find('.tag-this--remove-tag').trigger('click');
@@ -256,8 +257,8 @@
             }
 
             //call a beforeAddTag callback if it was set in the settings
-            if (settings.callbacks && callbacks[id] && callbacks[id]['beforeAddTag']) {
-                func = callbacks[id]['beforeAddTag'];
+            if (settings.callbacks && callbacks[id] && callbacks[id].beforeAddTag) {
+                func = callbacks[id].beforeAddTag;
                 dataToPass = {
                     context : $(this),
                     tags : tags,
@@ -322,8 +323,8 @@
                 $(this).resetInputSize(tag);
 
                 //call any callbacks we were passed for afterAddTag
-                if (settings.callbacks && callbacks[id] && callbacks[id]['afterAddTag']) {
-                    func = callbacks[id]['afterAddTag'];
+                if (settings.callbacks && callbacks[id] && callbacks[id].afterAddTag) {
+                    func = callbacks[id].afterAddTag;
                     dataToPass = {
                         context : $(this),
                         tags : tags,
@@ -331,9 +332,9 @@
                     };
                     func.call(this, dataToPass);
                 }
-                if(callbacks[id] && callbacks[id]['onChange'])
+                if(callbacks[id] && callbacks[id].onChange)
                 {
-                    func = callbacks[id]['onChange'];
+                    func = callbacks[id].onChange;
                     dataToPass = {
                         context : $(this),
                         tags : tags,
@@ -434,8 +435,8 @@
             var func, dataToPass, tags;
 
             //call the before callback
-            if (callbacks[id] && callbacks[id]['beforeRemoveTag']) {
-                func = callbacks[id]['beforeRemoveTag'];
+            if (callbacks[id] && callbacks[id].beforeRemoveTag) {
+                func = callbacks[id].beforeRemoveTag;
                 dataToPass = {
                     context : $(this),
                     tags : tags,
@@ -482,8 +483,8 @@
                 $(this).data('tags', tags);
 
                 //call any callbacks we passed
-                if (tags && callbacks[id] && callbacks[id]['afterRemoveTag']) {
-                    func = callbacks[id]['afterRemoveTag'];
+                if (tags && callbacks[id] && callbacks[id].afterRemoveTag) {
+                    func = callbacks[id].afterRemoveTag;
                     dataToPass = {
                         context : $(this),
                         tags : tags,
@@ -491,9 +492,9 @@
                     };
                     func.call(this, dataToPass);
                 }
-                if(callbacks[id] && callbacks[id]['onChange'])
+                if(callbacks[id] && callbacks[id].onChange)
                 {
-                    func = callbacks[id]['onChange'];
+                    func = callbacks[id].onChange;
                     dataToPass = {
                         context : $(this),
                         tags : tags,
@@ -523,9 +524,7 @@
 
             //check the text fields that exist against the one just entered, return true if it exists
             for (var i = 0; i < tags.length; i++) {
-                if (tags[i].text === data){
-                    return true;
-                }
+                return settings.caseInsensitiveValidation ? tags[i].text === data : tags[i].text.toUpperCase() === data.toUpperCase();
             }
 
         }
@@ -590,7 +589,7 @@
     $.fn.relayError = function(id, data, settings, tags, errors){
 
         //call any callbacks we passed
-        if (settings.callbacks && callbacks[id] && callbacks[id]['errors']) {
+        if (settings.callbacks && callbacks[id] && callbacks[id].errors) {
 
             var returnData = {
                 id : id,
@@ -600,7 +599,7 @@
                 errors : errors
             };
 
-            var func = callbacks[id]['errors'];
+            var func = callbacks[id].errors;
             func.call(this, returnData);
         }
     };
