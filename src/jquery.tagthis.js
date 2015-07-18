@@ -183,8 +183,6 @@
                     var fakeInput = $(event.data.fakeInput);
                     var fakeInputVal = fakeInput.val();
 
-                    $(this).autosizeInput(fakeInput);
-
                     if ( ( $.inArray(event.which, event.data.createTagWith) && !$.inArray(event.which, disallowedDelimeters) ) ||  event.which === 13 || event.which === 44 ) {
                         event.preventDefault();
                         $(event.data.realInput).addTag(fakeInputVal);
@@ -198,6 +196,10 @@
                     $(this).autosizeInput(fakeInput);
                 });
 
+                fakeInputElement.on( 'paste', data, function(event){
+                    var fakeInput = $(event.data.fakeInput);
+                    $(this).autosizeInput(fakeInput);
+                });
 
                 fakeInputElement.on( 'keydown', function(event){
                     if(event.keyCode === 8){
@@ -205,6 +207,7 @@
                     }
                 });
 
+                fakeInputElement.data('originalFakeInputWidth', parseInt(fakeInputElement.css('width').replace('px', '')) );
 
                 //Removes the tag-this--invalid class when user changes the value of the fake input
                 if(data.noDuplicates) {
@@ -546,12 +549,32 @@
 
     $.fn.autosizeInput = function(input){
 
-        var inputWidth = input.width(), newWidth;
+        var originalFakeInputWidth = input.data('originalFakeInputWidth'),
+            inputWidth = input.width(),
+            scrollWidth = input[0].scrollWidth, 
+            padding = parseInt(input.css('padding-left').replace('px', '')) + parseInt(input.css('padding-right').replace('px', '')),
+            parentWidth = input.parents('.tag-this').width(),
+            newWidth;
+        var wouldExceedMaxAcceptableInputWidth = input[0].scrollWidth + padding > parentWidth;
+        var inputNeedsToExpand = scrollWidth - inputWidth - padding > 0;
 
-        if(input[0].scrollWidth - inputWidth > 0){
-            newWidth = inputWidth + 30;
+        input.css('width', originalFakeInputWidth);
+
+        if( inputNeedsToExpand  && !wouldExceedMaxAcceptableInputWidth ){
+            newWidth = input[0].scrollWidth + padding;
         }
-
+        else if (!inputNeedsToExpand && !wouldExceedMaxAcceptableInputWidth) {
+            newWidth = input[0].scrollWidth;
+        }
+        else if (inputNeedsToExpand && wouldExceedMaxAcceptableInputWidth) {
+            newWidth = parentWidth;
+        }
+        else {
+            newWidth = input[0].scrollWidth;
+        }
+        if(input.val() === '') {
+            newWidth = originalFakeInputWidth;
+        }
         input.css('width', newWidth);
     };
 

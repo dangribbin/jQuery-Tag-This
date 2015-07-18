@@ -5,6 +5,7 @@ function tagAdded(data){
 }
 
 $('#simple-tags').tagThis({
+    noDuplicates: true,
     callbacks: {
         afterAddTag : tagAdded
     }
