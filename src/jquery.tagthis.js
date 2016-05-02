@@ -122,16 +122,8 @@
                             parent.before(tagToSwapWith);
                         }
                     }
-                    else if ( e.keyCode === 8 && $(this).val() === '' ) {
+                    else if ( ( e.keyCode === 8 || e.keyCode === 46 ) && $(this).val() === '' && settings.removeWithBackspace ) {
                         var tagToDelete = parent.prev('.tag');
-
-                        if ( tagToDelete ) {
-                            tagToDelete.find('.tag-this--remove-tag').trigger('click');
-                        }
-                    }
-                    else if ( e.keyCode === 46 && $(this).val() === '' ) {
-                        var tagToDelete = parent.next('.tag');
-
                         if ( tagToDelete ) {
                             tagToDelete.find('.tag-this--remove-tag').trigger('click');
                         }
