@@ -1,5 +1,5 @@
-<a name="1.2.6"></a>
-## [1.2.6](https://github.com/dangribbin/jQuery-Tag-This/compare/1.2.0...1.2.6) (2017-03-04)
+<a name="v1.2.1"></a>
+## [v1.2.1](https://github.com/dangribbin/jQuery-Tag-This/compare/v1.2.0...v1.2.1) (2017-03-04)
 
 ### Small Improvement
 
