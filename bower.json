@@ -1,27 +1,28 @@
 {
-    "name": "jQuery-Tag-This",
-    "version": "1.2.0",
-    "homepage": "http://www.dangribbin.net/jquery-tag-this",
-    "authors": [
-        "Dan Gribbin <@dangribbin>"
-    ],
-    "description": "A jQuery plugin to make tags from text!",
-    "main": "src/jquery.tagthis.js",
-    "keywords": [
-        "jQuery",
-        "tag",
-        "jQuery-Tag-This",
-        "Tag-This"
-    ],
-    "license": "MIT",
-    "ignore": [
-        "**/.*",
-        "node_modules",
-        "bower_components",
-        "test",
-        "tests"
-    ],
-    "dependencies": {
-        "jquery": ">= 1.11.0"
-    }
+  "name": "jQuery-Tag-This",
+  "version": "1.2.0",
+  "homepage": "http://www.dangribbin.net/jquery-tag-this",
+  "authors": [
+    "Dan Gribbin <@dangribbin>"
+  ],
+  "description": "A jQuery plugin to make tags from text!",
+  "main": "src/jquery.tagthis.js",
+  "keywords": [
+    "jQuery",
+    "tag",
+    "jQuery-Tag-This",
+    "Tag-This"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": ">= 1.11.0",
+    "jQuery-Tag-This": "https://github.com/herrmann-intl/jQuery-Tag-This"
+  }
 }

@@ -76,7 +76,7 @@
             }
 
             if (settings.interactive) {
-                html = html + '<input id="'+id+'--tag" value="" data-default="'+ settings.defaultText +'" />';
+                html = html + '<textarea id="'+id+'--tag" value="" data-default="'+ settings.defaultText +'" />';
             }
 
             html = html + '</div><div class="tag-this--clear"></div></div><div class="tag-this--error"></div>';
