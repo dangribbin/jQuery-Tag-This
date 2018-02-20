@@ -32,7 +32,8 @@
             maxChars : 0,
             maxTags : 0,
             width : '300px',
-            height : '100px'
+            height : '100px',
+            allowCustomInputs: true
         },options);
 
         this.each(function() {
@@ -139,7 +140,15 @@
                         source: settings.autocompleteSource,
                         select: function( event, ui ) {
                             event.preventDefault();
-                            realInputElement.addTag(ui.item.value);
+                            var tag_data = ui.item.value
+                            if (ui.item.id) {
+                                tag_data = {
+                                    id: ui.item.id,
+                                    text: ui.item.value
+                                }
+                            }
+
+                            realInputElement.addTag(tag_data);
                             fakeInputElement.focus();
                         }
                     };
@@ -159,7 +168,7 @@
                     var fakeInput = $(event.data.fakeInput);
                     var fakeInputVal = fakeInput.val();
 
-                    if (fakeInput.val() !== '' && fakeInput.val() !== defaultText) {
+                    if (settings.allowCustomInputs && fakeInput.val() !== '' && fakeInput.val() !== defaultText ) {
                         $(event.data.realInput).addTag(fakeInputVal);
                     } else {
                         fakeInput.val(fakeInput.attr('data-default'));
@@ -178,7 +187,8 @@
 
                     if ( ( $.inArray(event.which, event.data.createTagWith) && !$.inArray(event.which, disallowedDelimeters) ) ||  event.which === 13 || event.which === 44 ) {
                         event.preventDefault();
-                        $(event.data.realInput).addTag(fakeInputVal);
+                        if(settings.allowCustomInputs)
+                          $(event.data.realInput).addTag(fakeInputVal);
                         return false;
                     }
 
@@ -515,7 +525,7 @@
 
             //check the text fields that exist against the one just entered, return true if it exists
             for (var i = 0; i < tags.length; i++) {
-                if (tags[i].text === data){
+                if (tags[i].text === data || tags[i].text === data.text){
                     return true;
                 }
             }

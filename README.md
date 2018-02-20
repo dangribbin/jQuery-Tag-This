@@ -204,6 +204,9 @@ Below you can see what they are and what the default is.
 
 *boolean* - Hide the element you called `tagThis()` on (since tagThis creates its own) Default is `true`
 
+**`allowCustomInputs : true`**
+
+*boolean* - Allow to create custom tags (other than the ones provided by autocomplete for example) Default is `true`
 
 Autocomplete
 ============
